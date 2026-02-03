@@ -1,6 +1,7 @@
 import { useState, useMemo } from 'react';
 import { calculate } from '@/lib/calculators';
-import { formatCurrency } from '@/lib/utils';
+import { formatCurrency, formatCurrencyInEUR } from '@/lib/utils';
+import { convertToEUR } from '@/lib/config';
 import type { TaxInput, TaxResult, Country } from '@/types';
 
 const countries: Country[] = ['germany', 'netherlands', 'singapore', 'vietnam'];
@@ -17,6 +18,7 @@ export function ComparisonPage() {
 
   const [sortBy, setSortBy] = useState<'country' | 'net' | 'tax'>('net');
   const [sortOrder, setSortOrder] = useState<'asc' | 'desc'>('desc');
+  const [showConvertedCurrency, setShowConvertedCurrency] = useState(true);
 
   const results = useMemo(() => {
     return countries.map(country => {
@@ -36,17 +38,24 @@ export function ComparisonPage() {
       if (sortBy === 'country') {
         comparison = a.country.localeCompare(b.country);
       } else if (sortBy === 'net') {
-        comparison = a.netSalary - b.netSalary;
+        // Use converted values for accurate comparison
+        const aConverted = convertToEUR(a.netSalary, a.country);
+        const bConverted = convertToEUR(b.netSalary, b.country);
+        comparison = aConverted - bConverted;
       } else if (sortBy === 'tax') {
-        comparison = (a.totalTax + a.totalSocial) - (b.totalTax + b.totalSocial);
+        // Use converted values for accurate comparison
+        const aConverted = convertToEUR(a.totalTax + a.totalSocial, a.country);
+        const bConverted = convertToEUR(b.totalTax + b.totalSocial, b.country);
+        comparison = aConverted - bConverted;
       }
       return sortOrder === 'asc' ? comparison : -comparison;
     });
     return sorted;
   }, [results, sortBy, sortOrder]);
 
-  const bestNet = Math.max(...results.map(r => r.netSalary));
-  const lowestTax = Math.min(...results.map(r => r.totalTax + r.totalSocial));
+  // Calculate best values using converted currency for accurate comparison
+  const bestNet = Math.max(...results.map(r => convertToEUR(r.netSalary, r.country)));
+  const lowestTax = Math.min(...results.map(r => convertToEUR(r.totalTax + r.totalSocial, r.country)));
 
   const toggleSort = (column: 'country' | 'net' | 'tax') => {
     if (sortBy === column) {
@@ -145,6 +154,25 @@ export function ComparisonPage() {
             />
           </div>
         </div>
+
+        {/* Currency Toggle */}
+        <div className="mt-4 flex items-center justify-end">
+          <label className="flex items-center cursor-pointer">
+            <span className="mr-3 text-sm font-medium text-gray-700">
+              Show in EUR for comparison
+            </span>
+            <div className="relative">
+              <input
+                type="checkbox"
+                checked={showConvertedCurrency}
+                onChange={(e) => setShowConvertedCurrency(e.target.checked)}
+                className="sr-only"
+              />
+              <div className={`block w-14 h-8 rounded-full transition ${showConvertedCurrency ? 'bg-blue-600' : 'bg-gray-300'}`}></div>
+              <div className={`dot absolute left-1 top-1 bg-white w-6 h-6 rounded-full transition ${showConvertedCurrency ? 'transform translate-x-6' : ''}`}></div>
+            </div>
+          </label>
+        </div>
       </div>
 
       {/* Comparison Table */}
@@ -178,8 +206,11 @@ export function ComparisonPage() {
             </thead>
             <tbody className="bg-white divide-y divide-gray-200">
               {sortedResults.map((result) => {
-                const isHighlightNet = result.netSalary === bestNet;
-                const isHighlightTax = (result.totalTax + result.totalSocial) === lowestTax;
+                const netConverted = convertToEUR(result.netSalary, result.country);
+                const taxConverted = convertToEUR(result.totalTax + result.totalSocial, result.country);
+                // Use epsilon for floating-point comparison to handle precision issues
+                const isHighlightNet = Math.abs(netConverted - bestNet) < 0.01;
+                const isHighlightTax = Math.abs(taxConverted - lowestTax) < 0.01;
 
                 return (
                   <tr key={result.country} className="hover:bg-gray-50">
@@ -192,18 +223,39 @@ export function ComparisonPage() {
                       </span>
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap text-right text-sm text-gray-900">
-                      {formatCurrency(result.grossSalary, result.country)}
+                      {showConvertedCurrency ? (
+                        <div>
+                          <div>{formatCurrencyInEUR(convertToEUR(result.grossSalary, result.country))}</div>
+                          <div className="text-xs text-gray-500">{formatCurrency(result.grossSalary, result.country)}</div>
+                        </div>
+                      ) : (
+                        formatCurrency(result.grossSalary, result.country)
+                      )}
                     </td>
                     <td className={`px-6 py-4 whitespace-nowrap text-right text-sm font-semibold ${
                       isHighlightNet ? 'text-green-700 bg-green-50' : 'text-gray-900'
                     }`}>
-                      {formatCurrency(result.netSalary, result.country)}
+                      {showConvertedCurrency ? (
+                        <div>
+                          <div>{formatCurrencyInEUR(netConverted)}</div>
+                          <div className="text-xs text-gray-500 font-normal">{formatCurrency(result.netSalary, result.country)}</div>
+                        </div>
+                      ) : (
+                        formatCurrency(result.netSalary, result.country)
+                      )}
                       {isHighlightNet && ' 🏆'}
                     </td>
                     <td className={`px-6 py-4 whitespace-nowrap text-right text-sm ${
                       isHighlightTax ? 'text-green-700 bg-green-50 font-semibold' : 'text-gray-900'
                     }`}>
-                      {formatCurrency(result.totalTax + result.totalSocial, result.country)}
+                      {showConvertedCurrency ? (
+                        <div>
+                          <div>{formatCurrencyInEUR(taxConverted)}</div>
+                          <div className="text-xs text-gray-500 font-normal">{formatCurrency(result.totalTax + result.totalSocial, result.country)}</div>
+                        </div>
+                      ) : (
+                        formatCurrency(result.totalTax + result.totalSocial, result.country)
+                      )}
                       {isHighlightTax && ' 🏆'}
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap text-right text-sm text-gray-900">
