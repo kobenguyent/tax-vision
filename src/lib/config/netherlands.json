@@ -1,20 +1,20 @@
 {
   "taxBrackets": [
-    { "min": 0, "max": 38883, "rate": 0.357 },
-    { "min": 38884, "max": 79137, "rate": 0.3756 },
-    { "min": 79138, "max": null, "rate": 0.495 }
+    { "min": 0, "max": 38441, "rate": 0.3582 },
+    { "min": 38442, "max": 76817, "rate": 0.3748 },
+    { "min": 76818, "max": null, "rate": 0.495 }
   ],
   "taxCredits": {
     "general": {
-      "max": 3362,
+      "max": 3068,
       "phaseOutStart": 24813,
-      "phaseOutRate": 0.06415
+      "phaseOutRate": 0.06095
     },
     "labor": {
-      "max": 5672,
+      "max": 5599,
       "phaseOutStart": 11491,
-      "phaseOutEnd": 24821,
-      "phaseOutRate": 0.06510
+      "phaseOutEnd": 25463,
+      "phaseOutRate": 0.06317
     }
   }
 }

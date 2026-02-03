@@ -197,29 +197,29 @@ export class GermanyCalculator {
     if (taxableIncome <= 0) return 0;
 
     // Official German tax formula for 2026 (Grundtabelle)
-    // Zone 1: 0 to basic allowance (12,348) - 0% tax
+    // Zone 1: 0 to basic allowance (12,816) - 0% tax
     if (taxableIncome <= this.config.basicAllowance) {
       return 0;
     }
 
-    // Zone 2: 12,349 to 17,005 - progressive 14% to ~24%
-    if (taxableIncome <= 17005) {
+    // Zone 2: 12,817 to 17,430 - progressive 14% to ~24%
+    if (taxableIncome <= 17430) {
       const y = (taxableIncome - this.config.basicAllowance) / 10000;
       return (922.98 * y + 1400) * y;
     }
 
-    // Zone 3: 17,006 to 68,481 - progressive ~24% to 42%
-    if (taxableIncome <= 68481) {
-      const z = (taxableIncome - 17005) / 10000;
+    // Zone 3: 17,431 to 68,430 - progressive ~24% to 42%
+    if (taxableIncome <= 68430) {
+      const z = (taxableIncome - 17430) / 10000;
       return (181.19 * z + 2397) * z + 1025.38;
     }
 
-    // Zone 4: 68,482 to 277,825 - flat 42%
-    if (taxableIncome <= 277825) {
+    // Zone 4: 68,431 to 277,826 - flat 42%
+    if (taxableIncome <= 277826) {
       return taxableIncome * 0.42 - 10602.13;
     }
 
-    // Zone 5: Above 277,825 - flat 45%
+    // Zone 5: Above 277,826 - flat 45%
     return taxableIncome * 0.45 - 18936.88;
   }
 }

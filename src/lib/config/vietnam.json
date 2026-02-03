@@ -1,6 +1,6 @@
 {
-  "personalDeduction": 15500000,
-  "dependentDeduction": 6200000,
+  "personalDeduction": 18000000,
+  "dependentDeduction": 8800000,
   "taxBrackets": [
     { "min": 0, "max": 5000000, "rate": 0.05 },
     { "min": 5000001, "max": 10000000, "rate": 0.10 },
@@ -21,7 +21,7 @@
     },
     "unemployment": {
       "rate": 0.01,
-      "cap": 106200000
+      "cap": 117000000
     }
   }
 }
