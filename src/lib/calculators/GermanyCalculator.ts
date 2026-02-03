@@ -196,30 +196,36 @@ export class GermanyCalculator {
   private calculateIncomeTax(taxableIncome: number): number {
     if (taxableIncome <= 0) return 0;
 
-    // Official German tax formula for 2026 (Grundtabelle)
-    // Zone 1: 0 to basic allowance (12,816) - 0% tax
-    if (taxableIncome <= this.config.basicAllowance) {
+    const brackets = this.config.taxBrackets;
+    // Zone 1: 0 to basic allowance - 0% tax
+    const zone1Max = brackets[0].max;
+    if (taxableIncome <= zone1Max) {
       return 0;
     }
 
-    // Zone 2: 12,817 to 17,430 - progressive 14% to ~24%
-    if (taxableIncome <= 17430) {
-      const y = (taxableIncome - this.config.basicAllowance) / 10000;
+    // Zone 2: Progressive 14% to ~24%
+    const zone2Max = brackets[1].max;
+    if (taxableIncome <= zone2Max) {
+      const y = (taxableIncome - zone1Max) / 10000;
       return (922.98 * y + 1400) * y;
     }
 
-    // Zone 3: 17,431 to 68,430 - progressive ~24% to 42%
-    if (taxableIncome <= 68430) {
-      const z = (taxableIncome - 17430) / 10000;
+    // Zone 3: Progressive ~24% to 42%
+    const zone3Max = brackets[2].max;
+    if (taxableIncome <= zone3Max) {
+      const z = (taxableIncome - zone2Max) / 10000;
       return (181.19 * z + 2397) * z + 1025.38;
     }
 
-    // Zone 4: 68,431 to 277,826 - flat 42%
-    if (taxableIncome <= 277826) {
-      return taxableIncome * 0.42 - 10602.13;
+    // Zone 4: flat 42%
+    const zone4Max = brackets[3].max;
+    const zone4Rate = brackets[3].rate;
+    if (taxableIncome <= zone4Max) {
+      return taxableIncome * zone4Rate - 10602.13;
     }
 
-    // Zone 5: Above 277,826 - flat 45%
-    return taxableIncome * 0.45 - 18936.88;
+    // Zone 5: flat 45%
+    const zone5Rate = brackets[4].rate;
+    return taxableIncome * zone5Rate - 18936.88;
   }
 }
