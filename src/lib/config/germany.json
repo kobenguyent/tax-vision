@@ -1,6 +1,6 @@
 {
   "basicAllowance": 12816,
-  "childAllowance": 9540,
+  "childAllowance": 9912,
   "taxBrackets": [
     { "min": 0, "max": 12816, "rate": 0, "formula": "progressive" },
     { "min": 12817, "max": 17430, "rate": 0.14, "formula": "progressive" },
@@ -10,7 +10,7 @@
   ],
   "solidaritySurcharge": {
     "rate": 0.055,
-    "threshold": 19950
+    "threshold": 20500
   },
   "churchTax": {
     "BW": 0.08,
@@ -37,7 +37,7 @@
     },
     "health": {
       "rate": 0.073,
-      "additionalRate": 0.017
+      "additionalRate": 0.0085
     },
     "unemployment": {
       "rate": 0.013,
