@@ -208,8 +208,9 @@ export function ComparisonPage() {
               {sortedResults.map((result) => {
                 const netConverted = convertToEUR(result.netSalary, result.country);
                 const taxConverted = convertToEUR(result.totalTax + result.totalSocial, result.country);
-                const isHighlightNet = netConverted === bestNet;
-                const isHighlightTax = taxConverted === lowestTax;
+                // Use epsilon for floating-point comparison to handle precision issues
+                const isHighlightNet = Math.abs(netConverted - bestNet) < 0.01;
+                const isHighlightTax = Math.abs(taxConverted - lowestTax) < 0.01;
 
                 return (
                   <tr key={result.country} className="hover:bg-gray-50">

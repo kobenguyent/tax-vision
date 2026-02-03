@@ -18,7 +18,8 @@ export function getConfig(country: Country): any {
 }
 
 // Exchange rates to EUR (base currency)
-// These are approximate rates and should be updated periodically
+// Rates as of February 2026 - should be updated periodically for accuracy
+// Source: These are approximate market rates
 export const exchangeRates: Record<string, number> = {
   EUR: 1.0,      // Base currency
   SGD: 0.67,     // 1 SGD = ~0.67 EUR
