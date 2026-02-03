@@ -16,32 +16,51 @@
   ],
   "cpf": {
     "salaryCeiling": 8000,
+    "annualCeiling": 102000,
     "ageGroups": {
       "below55": {
         "employee": 0.20,
         "employer": 0.17,
         "allocation": {
-          "oa": 0.23,
-          "sa": 0.06,
-          "ma": 0.08
+          "oa": 0.6216,
+          "sa": 0.1621,
+          "ma": 0.2162
         }
       },
       "55to60": {
-        "employee": 0.155,
-        "employer": 0.185,
+        "employee": 0.15,
+        "employer": 0.15,
         "allocation": {
-          "oa": 0.15,
-          "sa": 0.115,
-          "ma": 0.08
+          "oa": 0.4919,
+          "sa": 0.2419,
+          "ma": 0.2661
         }
       },
       "60to65": {
-        "employee": 0.125,
-        "employer": 0.125,
+        "employee": 0.105,
+        "employer": 0.11,
         "allocation": {
-          "oa": 0.05,
-          "sa": 0.145,
-          "ma": 0.08
+          "oa": 0.1395,
+          "sa": 0.4884,
+          "ma": 0.3721
+        }
+      },
+      "65to70": {
+        "employee": 0.075,
+        "employer": 0.085,
+        "allocation": {
+          "oa": 0.0625,
+          "sa": 0.5625,
+          "ma": 0.375
+        }
+      },
+      "above70": {
+        "employee": 0.05,
+        "employer": 0.075,
+        "allocation": {
+          "oa": 0.08,
+          "sa": 0.48,
+          "ma": 0.44
         }
       }
     }

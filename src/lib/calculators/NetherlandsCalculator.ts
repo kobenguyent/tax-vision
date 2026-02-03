@@ -133,15 +133,15 @@ export class NetherlandsCalculator {
   }
 
   private calculateLaborCredit(income: number): number {
-    const { max, phaseOutStart, phaseOutEnd, phaseOutRate } = this.config.taxCredits.labor;
+    const { max, phaseOutStart, phaseOutEnd, phaseOutRate, buildUpRate } = this.config.taxCredits.labor;
     
     if (income <= phaseOutStart) {
-      return Math.min(max, income * 0.08425);
+      return Math.min(max, income * buildUpRate);
     }
     
     if (income >= phaseOutEnd) return 0;
     
-    const baseCredit = phaseOutStart * 0.08425;
+    const baseCredit = phaseOutStart * buildUpRate;
     const excess = income - phaseOutStart;
     const reduction = excess * phaseOutRate;
     return Math.max(0, baseCredit - reduction);
