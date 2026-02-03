@@ -1,0 +1,58 @@
+{
+  "basicAllowance": 12348,
+  "childAllowance": 9756,
+  "taxBrackets": [
+    { "min": 0, "max": 12348, "rate": 0, "formula": "progressive" },
+    { "min": 12349, "max": 17005, "rate": 0.14, "formula": "progressive" },
+    { "min": 17006, "max": 66760, "rate": 0.2397, "formula": "progressive" },
+    { "min": 66761, "max": 277825, "rate": 0.42, "formula": "linear" },
+    { "min": 277826, "max": null, "rate": 0.45, "formula": "linear" }
+  ],
+  "solidaritySurcharge": {
+    "rate": 0.055,
+    "threshold": 20350
+  },
+  "churchTax": {
+    "BW": 0.08,
+    "BY": 0.08,
+    "BE": 0.09,
+    "BB": 0.09,
+    "HB": 0.09,
+    "HH": 0.09,
+    "HE": 0.09,
+    "MV": 0.09,
+    "NI": 0.09,
+    "NW": 0.09,
+    "RP": 0.09,
+    "SL": 0.09,
+    "SN": 0.09,
+    "ST": 0.09,
+    "SH": 0.09,
+    "TH": 0.09
+  },
+  "socialContributions": {
+    "pension": {
+      "rate": 0.093,
+      "ceiling": 101400
+    },
+    "health": {
+      "rate": 0.073,
+      "additionalRate": 0.029
+    },
+    "unemployment": {
+      "rate": 0.013,
+      "ceiling": 101400
+    },
+    "care": {
+      "baseRate": 0.018,
+      "rates": {
+        "noChildren": 0.023,
+        "oneChild": 0.017,
+        "twoChildren": 0.0145,
+        "threeChildren": 0.012,
+        "fourChildren": 0.0095,
+        "fiveOrMore": 0.007
+      }
+    }
+  }
+}

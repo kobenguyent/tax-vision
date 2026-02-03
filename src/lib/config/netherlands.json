@@ -1,0 +1,20 @@
+{
+  "taxBrackets": [
+    { "min": 0, "max": 38883, "rate": 0.357 },
+    { "min": 38884, "max": 79137, "rate": 0.3756 },
+    { "min": 79138, "max": null, "rate": 0.495 }
+  ],
+  "taxCredits": {
+    "general": {
+      "max": 3362,
+      "phaseOutStart": 24813,
+      "phaseOutRate": 0.06415
+    },
+    "labor": {
+      "max": 5672,
+      "phaseOutStart": 11491,
+      "phaseOutEnd": 24821,
+      "phaseOutRate": 0.06510
+    }
+  }
+}

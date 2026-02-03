@@ -1,0 +1,35 @@
+{
+  "basicExemption": 480000,
+  "spouseExemption": 380000,
+  "dependentExemption": 380000,
+  "taxBrackets": [
+    { "min": 0, "max": 1950000, "rate": 0.05 },
+    { "min": 1950000, "max": 3300000, "rate": 0.10 },
+    { "min": 3300000, "max": 6950000, "rate": 0.20 },
+    { "min": 6950000, "max": 9000000, "rate": 0.23 },
+    { "min": 9000000, "max": 18000000, "rate": 0.33 },
+    { "min": 18000000, "max": 40000000, "rate": 0.40 },
+    { "min": 40000000, "max": null, "rate": 0.45 }
+  ],
+  "reconstructionTax": 0.021,
+  "residentTax": {
+    "rate": 0.10,
+    "perCapita": 5000
+  },
+  "socialInsurance": {
+    "pension": {
+      "rate": 0.183,
+      "ceiling": 6500000
+    },
+    "health": {
+      "rate": 0.10
+    },
+    "employment": {
+      "rate": 0.011
+    },
+    "care": {
+      "rate": 0.0159,
+      "minAge": 40
+    }
+  }
+}

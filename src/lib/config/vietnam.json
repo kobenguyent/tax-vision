@@ -1,0 +1,27 @@
+{
+  "personalDeduction": 15500000,
+  "dependentDeduction": 6200000,
+  "taxBrackets": [
+    { "min": 0, "max": 5000000, "rate": 0.05 },
+    { "min": 5000001, "max": 10000000, "rate": 0.10 },
+    { "min": 10000001, "max": 18000000, "rate": 0.15 },
+    { "min": 18000001, "max": 32000000, "rate": 0.20 },
+    { "min": 32000001, "max": 52000000, "rate": 0.25 },
+    { "min": 52000001, "max": 80000000, "rate": 0.30 },
+    { "min": 80000001, "max": null, "rate": 0.35 }
+  ],
+  "socialInsurance": {
+    "social": {
+      "rate": 0.08,
+      "cap": 46800000
+    },
+    "health": {
+      "rate": 0.015,
+      "cap": 46800000
+    },
+    "unemployment": {
+      "rate": 0.01,
+      "cap": 106200000
+    }
+  }
+}

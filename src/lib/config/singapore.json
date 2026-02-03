@@ -1,0 +1,49 @@
+{
+  "taxBrackets": [
+    { "min": 0, "max": 20000, "rate": 0 },
+    { "min": 20001, "max": 30000, "rate": 0.02 },
+    { "min": 30001, "max": 40000, "rate": 0.035 },
+    { "min": 40001, "max": 80000, "rate": 0.07 },
+    { "min": 80001, "max": 120000, "rate": 0.115 },
+    { "min": 120001, "max": 160000, "rate": 0.15 },
+    { "min": 160001, "max": 200000, "rate": 0.18 },
+    { "min": 200001, "max": 240000, "rate": 0.19 },
+    { "min": 240001, "max": 280000, "rate": 0.195 },
+    { "min": 280001, "max": 320000, "rate": 0.20 },
+    { "min": 320001, "max": 500000, "rate": 0.22 },
+    { "min": 500001, "max": 1000000, "rate": 0.23 },
+    { "min": 1000001, "max": null, "rate": 0.24 }
+  ],
+  "cpf": {
+    "salaryCeiling": 8000,
+    "ageGroups": {
+      "below55": {
+        "employee": 0.20,
+        "employer": 0.17,
+        "allocation": {
+          "oa": 0.23,
+          "sa": 0.06,
+          "ma": 0.08
+        }
+      },
+      "55to60": {
+        "employee": 0.155,
+        "employer": 0.185,
+        "allocation": {
+          "oa": 0.15,
+          "sa": 0.115,
+          "ma": 0.08
+        }
+      },
+      "60to65": {
+        "employee": 0.125,
+        "employer": 0.125,
+        "allocation": {
+          "oa": 0.05,
+          "sa": 0.145,
+          "ma": 0.08
+        }
+      }
+    }
+  }
+}
