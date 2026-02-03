@@ -16,16 +16,17 @@ export class JapanCalculator {
       category: 'income',
     });
 
-    // Social insurance (employee pays 50%)
+    // Social insurance (employee pays their share)
+    const employeeShare = this.config.socialInsurance.employeeShare;
     const pensionBase = Math.min(annualGross, this.config.socialInsurance.pension.ceiling);
-    const pension = pensionBase * this.config.socialInsurance.pension.rate * 0.5;
+    const pension = pensionBase * this.config.socialInsurance.pension.rate * employeeShare;
     
-    const health = annualGross * this.config.socialInsurance.health.rate * 0.5;
-    const employment = annualGross * this.config.socialInsurance.employment.rate * 0.5;
+    const health = annualGross * this.config.socialInsurance.health.rate * employeeShare;
+    const employment = annualGross * this.config.socialInsurance.employment.rate * employeeShare;
     
     let care = 0;
     if (input.age >= this.config.socialInsurance.care.minAge) {
-      care = annualGross * this.config.socialInsurance.care.rate * 0.5;
+      care = annualGross * this.config.socialInsurance.care.rate * employeeShare;
     }
 
     const totalSocial = pension + health + employment + care;

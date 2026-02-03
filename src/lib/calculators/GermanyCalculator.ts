@@ -32,7 +32,7 @@ export class GermanyCalculator {
     const pension = pensionBase * this.config.socialContributions.pension.rate;
     
     const health = annualGross * this.config.socialContributions.health.rate;
-    const additionalRate = (input.healthInsuranceRate || 1.7) / 100;
+    const additionalRate = (input.healthInsuranceRate || this.config.socialContributions.health.defaultAdditionalRate * 100) / 100;
     const healthAdditional = annualGross * additionalRate;
     
     const unemploymentBase = Math.min(annualGross, this.config.socialContributions.unemployment.ceiling);
@@ -127,7 +127,7 @@ export class GermanyCalculator {
     // Church tax
     let churchTax = 0;
     if (input.churchTax && input.region) {
-      const rate = this.config.churchTax[input.region as keyof typeof this.config.churchTax] || 0.09;
+      const rate = this.config.churchTax[input.region as keyof typeof this.config.churchTax] || this.config.churchTax.defaultRate;
       churchTax = incomeTax * rate;
       breakdown.push({
         label: 'Church Tax',
@@ -207,25 +207,29 @@ export class GermanyCalculator {
     const zone2Max = brackets[1].max;
     if (taxableIncome <= zone2Max) {
       const y = (taxableIncome - zone1Max) / 10000;
-      return (922.98 * y + 1400) * y;
+      const { a, b } = brackets[1].coefficients;
+      return (a * y + b) * y;
     }
 
     // Zone 3: Progressive ~24% to 42%
     const zone3Max = brackets[2].max;
     if (taxableIncome <= zone3Max) {
       const z = (taxableIncome - zone2Max) / 10000;
-      return (181.19 * z + 2397) * z + 1025.38;
+      const { a, b, base } = brackets[2].coefficients;
+      return (a * z + b) * z + base;
     }
 
     // Zone 4: flat 42%
     const zone4Max = brackets[3].max;
     const zone4Rate = brackets[3].rate;
+    const zone4Deduction = brackets[3].deduction;
     if (taxableIncome <= zone4Max) {
-      return taxableIncome * zone4Rate - 10602.13;
+      return taxableIncome * zone4Rate - zone4Deduction;
     }
 
     // Zone 5: flat 45%
     const zone5Rate = brackets[4].rate;
-    return taxableIncome * zone5Rate - 18936.88;
+    const zone5Deduction = brackets[4].deduction;
+    return taxableIncome * zone5Rate - zone5Deduction;
   }
 }

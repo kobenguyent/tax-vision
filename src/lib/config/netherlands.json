@@ -14,7 +14,8 @@
       "max": 5599,
       "phaseOutStart": 11491,
       "phaseOutEnd": 25463,
-      "phaseOutRate": 0.06317
+      "phaseOutRate": 0.06317,
+      "buildUpRate": 0.08425
     }
   }
 }

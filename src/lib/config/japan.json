@@ -17,6 +17,7 @@
     "perCapita": 5000
   },
   "socialInsurance": {
+    "employeeShare": 0.5,
     "pension": {
       "rate": 0.183,
       "ceiling": 6700000

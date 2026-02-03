@@ -3,16 +3,17 @@
   "childAllowance": 9912,
   "taxBrackets": [
     { "min": 0, "max": 12816, "rate": 0, "formula": "progressive" },
-    { "min": 12817, "max": 17430, "rate": 0.14, "formula": "progressive" },
-    { "min": 17431, "max": 68430, "rate": 0.2397, "formula": "progressive" },
-    { "min": 68431, "max": 277826, "rate": 0.42, "formula": "linear" },
-    { "min": 277827, "max": null, "rate": 0.45, "formula": "linear" }
+    { "min": 12817, "max": 17430, "rate": 0.14, "formula": "progressive", "coefficients": { "a": 922.98, "b": 1400 } },
+    { "min": 17431, "max": 68430, "rate": 0.2397, "formula": "progressive", "coefficients": { "a": 181.19, "b": 2397, "base": 1025.38 } },
+    { "min": 68431, "max": 277826, "rate": 0.42, "formula": "linear", "deduction": 10602.13 },
+    { "min": 277827, "max": null, "rate": 0.45, "formula": "linear", "deduction": 18936.88 }
   ],
   "solidaritySurcharge": {
     "rate": 0.055,
     "threshold": 20500
   },
   "churchTax": {
+    "defaultRate": 0.09,
     "BW": 0.08,
     "BY": 0.08,
     "BE": 0.09,
@@ -37,7 +38,8 @@
     },
     "health": {
       "rate": 0.073,
-      "additionalRate": 0.0085
+      "additionalRate": 0.0085,
+      "defaultAdditionalRate": 0.017
     },
     "unemployment": {
       "rate": 0.013,
