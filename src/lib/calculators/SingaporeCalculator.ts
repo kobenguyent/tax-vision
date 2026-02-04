@@ -143,6 +143,8 @@ export class SingaporeCalculator {
   private getCPFAgeGroup(age: number) {
     if (age <= 55) return this.config.cpf.ageGroups.below55;
     if (age <= 60) return this.config.cpf.ageGroups['55to60'];
-    return this.config.cpf.ageGroups['60to65'];
+    if (age <= 65) return this.config.cpf.ageGroups['60to65'];
+    if (age <= 70) return this.config.cpf.ageGroups['65to70'];
+    return this.config.cpf.ageGroups.above70;
   }
 }

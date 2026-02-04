@@ -32,7 +32,7 @@ export class GermanyCalculator {
     const pension = pensionBase * this.config.socialContributions.pension.rate;
     
     const health = annualGross * this.config.socialContributions.health.rate;
-    const additionalRate = (input.healthInsuranceRate || 1.7) / 100;
+    const additionalRate = (input.healthInsuranceRate || this.config.socialContributions.health.defaultAdditionalRate * 100) / 100;
     const healthAdditional = annualGross * additionalRate;
     
     const unemploymentBase = Math.min(annualGross, this.config.socialContributions.unemployment.ceiling);
@@ -127,7 +127,7 @@ export class GermanyCalculator {
     // Church tax
     let churchTax = 0;
     if (input.churchTax && input.region) {
-      const rate = this.config.churchTax[input.region as keyof typeof this.config.churchTax] || 0.09;
+      const rate = this.config.churchTax[input.region as keyof typeof this.config.churchTax] || this.config.churchTax.defaultRate;
       churchTax = incomeTax * rate;
       breakdown.push({
         label: 'Church Tax',
@@ -196,30 +196,40 @@ export class GermanyCalculator {
   private calculateIncomeTax(taxableIncome: number): number {
     if (taxableIncome <= 0) return 0;
 
-    // Official German tax formula for 2026 (Grundtabelle)
-    // Zone 1: 0 to basic allowance (12,348) - 0% tax
-    if (taxableIncome <= this.config.basicAllowance) {
+    const brackets = this.config.taxBrackets;
+    // Zone 1: 0 to basic allowance - 0% tax
+    const zone1Max = brackets[0].max;
+    if (taxableIncome <= zone1Max) {
       return 0;
     }
 
-    // Zone 2: 12,349 to 17,005 - progressive 14% to ~24%
-    if (taxableIncome <= 17005) {
-      const y = (taxableIncome - this.config.basicAllowance) / 10000;
-      return (922.98 * y + 1400) * y;
+    // Zone 2: Progressive 14% to ~24%
+    const zone2Max = brackets[1].max;
+    if (taxableIncome <= zone2Max) {
+      const y = (taxableIncome - zone1Max) / 10000;
+      const { a, b } = brackets[1].coefficients;
+      return (a * y + b) * y;
     }
 
-    // Zone 3: 17,006 to 68,481 - progressive ~24% to 42%
-    if (taxableIncome <= 68481) {
-      const z = (taxableIncome - 17005) / 10000;
-      return (181.19 * z + 2397) * z + 1025.38;
+    // Zone 3: Progressive ~24% to 42%
+    const zone3Max = brackets[2].max;
+    if (taxableIncome <= zone3Max) {
+      const z = (taxableIncome - zone2Max) / 10000;
+      const { a, b, base } = brackets[2].coefficients;
+      return (a * z + b) * z + base;
     }
 
-    // Zone 4: 68,482 to 277,825 - flat 42%
-    if (taxableIncome <= 277825) {
-      return taxableIncome * 0.42 - 10602.13;
+    // Zone 4: flat 42%
+    const zone4Max = brackets[3].max;
+    const zone4Rate = brackets[3].rate;
+    const zone4Deduction = brackets[3].deduction;
+    if (taxableIncome <= zone4Max) {
+      return taxableIncome * zone4Rate - zone4Deduction;
     }
 
-    // Zone 5: Above 277,825 - flat 45%
-    return taxableIncome * 0.45 - 18936.88;
+    // Zone 5: flat 45%
+    const zone5Rate = brackets[4].rate;
+    const zone5Deduction = brackets[4].deduction;
+    return taxableIncome * zone5Rate - zone5Deduction;
   }
 }
