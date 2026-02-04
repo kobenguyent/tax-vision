@@ -142,6 +142,15 @@ Tax rates are stored in JSON files in `src/lib/config/`. To update rates:
 
 No code changes required for rate updates!
 
+## Analytics
+
+This project uses [Umami](https://umami.is/) for privacy-focused analytics. Key features:
+- Automatic pageview tracking
+- Custom event tracking for user interactions (calculations, mode switches, sharing)
+- GDPR-compliant, no cookies, no personal data collection
+
+See [docs/ANALYTICS.md](docs/ANALYTICS.md) for detailed configuration and event tracking information.
+
 ## Browser Support
 
 - Chrome/Edge 90+

@@ -2,6 +2,7 @@ import { useCalculatorStore } from '@/lib/store/calculator';
 import { calculate } from '@/lib/calculators';
 import { useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
+import { UmamiEvents } from '@/lib/analytics';
 
 export function CalculatorForm() {
   const { input, setInput, setResult, addToHistory } = useCalculatorStore();
@@ -17,8 +18,10 @@ export function CalculatorForm() {
         input,
         result,
       });
+      UmamiEvents.calculationCompleted(input.country, input.direction);
     } catch (error) {
       console.error('Calculation error:', error);
+      UmamiEvents.calculationError(input.country, error instanceof Error ? error.message : 'Unknown error');
     }
   }, [input]);
 
@@ -47,7 +50,10 @@ export function CalculatorForm() {
           </label>
           <div className="flex gap-2">
             <button
-              onClick={() => setInput({ frequency: 'monthly' })}
+              onClick={() => {
+                setInput({ frequency: 'monthly' });
+                UmamiEvents.frequencyChanged('monthly');
+              }}
               className={`flex-1 px-4 py-2 rounded-lg font-medium transition-colors ${
                 input.frequency === 'monthly'
                   ? 'bg-blue-600 text-white'
@@ -57,7 +63,10 @@ export function CalculatorForm() {
               {t('monthly')}
             </button>
             <button
-              onClick={() => setInput({ frequency: 'annual' })}
+              onClick={() => {
+                setInput({ frequency: 'annual' });
+                UmamiEvents.frequencyChanged('annual');
+              }}
               className={`flex-1 px-4 py-2 rounded-lg font-medium transition-colors ${
                 input.frequency === 'annual'
                   ? 'bg-blue-600 text-white'
@@ -76,7 +85,10 @@ export function CalculatorForm() {
           </label>
           <div className="flex gap-2">
             <button
-              onClick={() => setInput({ direction: 'grossToNet' })}
+              onClick={() => {
+                setInput({ direction: 'grossToNet' });
+                UmamiEvents.directionChanged('grossToNet');
+              }}
               className={`flex-1 px-4 py-2 rounded-lg font-medium transition-colors ${
                 input.direction === 'grossToNet'
                   ? 'bg-blue-600 text-white'
@@ -86,7 +98,10 @@ export function CalculatorForm() {
               {t('grossToNet')}
             </button>
             <button
-              onClick={() => setInput({ direction: 'netToGross' })}
+              onClick={() => {
+                setInput({ direction: 'netToGross' });
+                UmamiEvents.directionChanged('netToGross');
+              }}
               className={`flex-1 px-4 py-2 rounded-lg font-medium transition-colors ${
                 input.direction === 'netToGross'
                   ? 'bg-blue-600 text-white'
@@ -105,7 +120,12 @@ export function CalculatorForm() {
           </label>
           <select
             value={input.country}
-            onChange={(e) => setInput({ country: e.target.value as any })}
+            onChange={(e) => {
+              const newCountry = e.target.value as any;
+              const prevCountry = input.country;
+              setInput({ country: newCountry });
+              UmamiEvents.countryChanged(newCountry, prevCountry);
+            }}
             className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
           >
             <option value="germany">{t('germany')}</option>
@@ -155,7 +175,11 @@ export function CalculatorForm() {
             </label>
             <select
               value={input.maritalStatus}
-              onChange={(e) => setInput({ maritalStatus: e.target.value as any })}
+              onChange={(e) => {
+                const newStatus = e.target.value as any;
+                setInput({ maritalStatus: newStatus });
+                UmamiEvents.maritalStatusChanged(newStatus, input.country);
+              }}
               className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
             >
               <option value="single">{t('single')}</option>
@@ -175,7 +199,11 @@ export function CalculatorForm() {
             <input
               type="number"
               value={input.dependents}
-              onChange={(e) => setInput({ dependents: parseInt(e.target.value) || 0 })}
+              onChange={(e) => {
+                const count = parseInt(e.target.value) || 0;
+                setInput({ dependents: count });
+                UmamiEvents.dependentsChanged(count, input.country);
+              }}
               min="0"
               className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
             />
@@ -191,7 +219,11 @@ export function CalculatorForm() {
               </label>
               <select
                 value={input.insuranceClass || 1}
-                onChange={(e) => setInput({ insuranceClass: parseInt(e.target.value) })}
+                onChange={(e) => {
+                  const insuranceClass = parseInt(e.target.value);
+                  setInput({ insuranceClass });
+                  UmamiEvents.insuranceClassChanged(insuranceClass, input.country);
+                }}
                 className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
               >
                 <option value="1">Class I - Single, no children</option>
@@ -209,7 +241,11 @@ export function CalculatorForm() {
               </label>
               <select
                 value={input.region || 'BE'}
-                onChange={(e) => setInput({ region: e.target.value })}
+                onChange={(e) => {
+                  const region = e.target.value;
+                  setInput({ region });
+                  UmamiEvents.regionChanged(region, input.country);
+                }}
                 className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
               >
                 <option value="BW">Baden-Württemberg</option>
@@ -248,7 +284,11 @@ export function CalculatorForm() {
               <input
                 type="checkbox"
                 checked={input.churchTax || false}
-                onChange={(e) => setInput({ churchTax: e.target.checked })}
+                onChange={(e) => {
+                  const checked = e.target.checked;
+                  setInput({ churchTax: checked });
+                  UmamiEvents.churchTaxToggled(checked, input.country);
+                }}
                 className="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500"
               />
               <label className="ml-2 text-sm font-medium text-gray-700">

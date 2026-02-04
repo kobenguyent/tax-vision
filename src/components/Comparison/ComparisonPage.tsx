@@ -2,6 +2,7 @@ import { useState, useMemo } from 'react';
 import { calculate } from '@/lib/calculators';
 import { formatCurrency } from '@/lib/utils';
 import type { TaxInput, TaxResult, Country } from '@/types';
+import { UmamiEvents } from '@/lib/analytics';
 
 const countries: Country[] = ['germany', 'netherlands', 'singapore', 'vietnam'];
 
@@ -55,6 +56,7 @@ export function ComparisonPage() {
       setSortBy(column);
       setSortOrder('desc');
     }
+    UmamiEvents.comparisonSorted(column);
   };
 
   return (

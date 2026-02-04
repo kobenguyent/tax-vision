@@ -1,12 +1,20 @@
 import { useCalculatorStore } from '@/lib/store/calculator';
 import { PieChart, Pie, Cell, ResponsiveContainer, Legend, Tooltip, BarChart, Bar, XAxis, YAxis, CartesianGrid } from 'recharts';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
+import { UmamiEvents } from '@/lib/analytics';
 
 export function TaxChart() {
   const { result } = useCalculatorStore();
   const { t } = useTranslation();
   const [chartType, setChartType] = useState<'pie' | 'bar'>('pie');
+
+  // Track when chart is viewed
+  useEffect(() => {
+    if (result) {
+      UmamiEvents.chartViewed(chartType);
+    }
+  }, [chartType, result]);
 
   if (!result) return null;
 
@@ -64,6 +72,7 @@ export function TaxChart() {
                 outerRadius={100}
                 fill="#8884d8"
                 dataKey="value"
+                onClick={() => UmamiEvents.chartInteraction('pie', 'click')}
               >
                 {chartData.map((entry, index) => (
                   <Cell key={`cell-${index}`} fill={entry.color} />

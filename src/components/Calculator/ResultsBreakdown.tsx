@@ -3,6 +3,7 @@ import { formatCurrency } from '@/lib/utils';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { breakdownTranslations } from '@/lib/breakdownTranslations';
+import { UmamiEvents } from '@/lib/analytics';
 
 export function ResultsBreakdown() {
   const { result } = useCalculatorStore();
@@ -22,6 +23,9 @@ export function ResultsBreakdown() {
     navigator.clipboard.writeText(text);
     setCopied(true);
     setTimeout(() => setCopied(false), 2000);
+    if (result) {
+      UmamiEvents.resultsCopied(result.country);
+    }
   };
 
   const handleShare = () => {
@@ -29,6 +33,9 @@ export function ResultsBreakdown() {
     navigator.clipboard.writeText(url);
     setCopied(true);
     setTimeout(() => setCopied(false), 2000);
+    if (result) {
+      UmamiEvents.urlShared(result.country);
+    }
   };
 
   return (
