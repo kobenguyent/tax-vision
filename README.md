@@ -2,6 +2,9 @@
 
 A comprehensive web application for calculating salary conversions between gross and net (bidirectional) across multiple countries in EU and Asia.
 
+<img width="1561" height="866" alt="demo-2" src="https://github.com/user-attachments/assets/62e8ecb8-5503-477e-affe-fd282aa6a25b" />
+<img width="1576" height="859" alt="demo-1" src="https://github.com/user-attachments/assets/00148b2a-6758-4095-bd07-2540eb78b381" />
+
 ## Features
 
 - **Bidirectional Calculation**: Convert from gross to net or net to gross salary
